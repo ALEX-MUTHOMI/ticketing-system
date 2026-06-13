@@ -1,0 +1,42 @@
+[project]
+name = "ticketing-system"
+version = "0.1.0"
+description = "Multi-company ticketing platform with checkout holds, payments, QR tickets, check-in, refunds, settlements, and organizer reporting."
+authors = [
+    {name = "Alex Muthomi",email = "muthomialex64@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "django (>=6.0.6,<7.0.0)",
+    "djangorestframework (>=3.17.1,<4.0.0)",
+    "django-environ (>=0.13.0,<0.14.0)",
+    "psycopg[binary] (>=3.3.4,<4.0.0)",
+    "celery (>=5.6.3,<6.0.0)",
+    "redis (>=8.0.0,<9.0.0)",
+    "django-cors-headers (>=4.9.0,<5.0.0)",
+    "drf-spectacular (>=0.29.0,<0.30.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.3,<10.0.0)",
+    "pytest-django (>=4.12.0,<5.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "coverage (>=7.14.1,<8.0.0)",
+    "ruff (>=0.15.17,<0.16.0)",
+    "bandit (>=1.9.4,<2.0.0)",
+    "detect-secrets (>=1.5.0,<2.0.0)",
+    "pre-commit (>=4.6.0,<5.0.0)"
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+testpaths = ["tests"]
+addopts = "-ra"
