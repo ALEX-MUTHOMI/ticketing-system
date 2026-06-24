@@ -5,7 +5,10 @@ env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-only-key-change-in-production')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'    'core.middleware.RequestIDMiddleware',
+    'core.middleware.SecurityHeadersMiddleware',
+    'core.middleware.RequestLoggingMiddleware',
+])
 
 DJANGO_APPS = [
     'django.contrib.admin',
