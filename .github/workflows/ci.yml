@@ -1,9 +1,75 @@
-# Newman automated Postman collection runner
+name: CI
 
-# coverage and security
+on:
+  push:
+    branches: [development, staging, main]
+  pull_request:
+    branches: [staging, main]
 
-# chore(ci): add Docker-based pytest step with Postgres and Redis test services [skip ci]
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ruff
+      - run: ruff check .
+      - run: ruff format --check .
 
-# chore(ci): add ZAP baseline security scan step for OWASP passive scanning [skip ci]
+  security-static:
+    name: Security Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install bandit detect-secrets pip-audit
+      - run: bandit -r . -x ./tests,./venv -ll
+      - run: detect-secrets scan --baseline .secrets.baseline
+      - run: pip install poetry && poetry install && pip-audit
 
-# chore(ci): add performance and query regression test step to GitHub Actions [skip ci]
+  test:
+    name: Tests (Docker)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ticketing_test
+          POSTGRES_USER: ticketing
+          POSTGRES_PASSWORD: testpass
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://ticketing:testpass@localhost:5432/ticketing_test
+      REDIS_URL: redis://localhost:6379/0
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      SECRET_KEY: ci-test-secret-key-not-for-production
+      QR_SECRET: ci-qr-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install poetry && poetry install
+      - run: python manage.py migrate --settings=config.settings.development
+      - run: pytest --cov=. --cov-report=xml --cov-fail-under=70 -q
+      - uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
