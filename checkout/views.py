@@ -5,3 +5,5 @@ from django.shortcuts import render
 # checkout init
 
 # hold confirm
+
+# hold release
