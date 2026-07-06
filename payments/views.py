@@ -5,3 +5,5 @@ from django.shortcuts import render
 # ls checkout
 
 # m-pesa stk push
+
+# payment status polling
