@@ -65,3 +65,5 @@ class CompanyMember(models.Model):
 
     def __str__(self):
         return f'{self.user.email} @ {self.company.name} ({self.role})'
+
+# db index reporting
