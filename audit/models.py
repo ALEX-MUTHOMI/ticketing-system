@@ -41,3 +41,5 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f'{self.action} by {self.actor} at {self.created_at}'
+
+# retention policy
