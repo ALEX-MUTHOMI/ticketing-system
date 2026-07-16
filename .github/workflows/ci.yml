@@ -3,3 +3,5 @@
 # coverage and security
 
 # chore(ci): add Docker-based pytest step with Postgres and Redis test services [skip ci]
+
+# chore(ci): add ZAP baseline security scan step for OWASP passive scanning [skip ci]
