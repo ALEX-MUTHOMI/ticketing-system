@@ -1,3 +1,5 @@
 # Newman automated Postman collection runner
 
 # coverage and security
+
+# chore(ci): add Docker-based pytest step with Postgres and Redis test services [skip ci]
