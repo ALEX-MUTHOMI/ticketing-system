@@ -1,1 +1,3 @@
 ﻿# ci
+
+# chore(ci): add smoke test step post-deploy hitting health and readiness endpoints [skip ci]
