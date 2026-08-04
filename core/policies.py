@@ -7,3 +7,5 @@
 # API versioning middleware
 
 # Response envelope middleware
+
+# OpenAPI schema generation
