@@ -11,3 +11,5 @@
 # OpenAPI schema generation
 
 # Gate management
+
+# Bulk QR scan
