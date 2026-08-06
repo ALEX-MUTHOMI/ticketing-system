@@ -13,3 +13,5 @@
 # Gate management
 
 # Bulk QR scan
+
+# Dynamic pricing tier support
