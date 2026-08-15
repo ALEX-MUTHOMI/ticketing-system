@@ -140,3 +140,5 @@ pytest --cov=. --cov-report=html
 - **Security:** Cloudflare WAF + Turnstile, HMAC webhooks, Bloom filters
 - **Observability:** structlog, Sentry (PII-scrubbed), request ID middleware
 - **CI/CD:** GitHub Actions, Docker Compose, ZAP, ruff, bandit
+
+# architecture DS&A API
