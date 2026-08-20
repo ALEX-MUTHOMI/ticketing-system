@@ -55,11 +55,8 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "config.settings"
-python_files = ["tests.py", "test_*.py", "*_tests.py"]
-testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "config.settings.development"
+python_files = ["test_*.py", "tests.py", "*_tests.py"]
+testpaths = ["tests", "checkout", "checkin", "events", "inventory", "payments", "tickets", "companies", "accounts"]
 addopts = "-ra"
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py", "tests.py"]

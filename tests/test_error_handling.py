@@ -1,1 +1,0 @@
-# zero stack trace test
