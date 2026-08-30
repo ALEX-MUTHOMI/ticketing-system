@@ -5,30 +5,20 @@
 # once services are ready (long-running processes live in `terminals`).
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=common.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 cd "$REPO_DIR"
-export PATH="$HOME/.local/bin:$PATH"
 
-echo "==> [start] Starting PostgreSQL"
-sudo pg_ctlcluster 16 main start 2>/dev/null || true
-for _ in $(seq 1 30); do
-  sudo -u postgres pg_isready -q && break
-  sleep 1
-done
+log start "Starting PostgreSQL"
+start_postgres
 
-echo "==> [start] Starting Redis"
-if ! redis-cli ping >/dev/null 2>&1; then
-  sudo redis-server /etc/redis/redis.conf --daemonize yes
-fi
+log start "Starting Redis"
+start_redis
 
-echo "==> [start] Ensuring role/databases exist (idempotent)"
-sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='ticketing'" | grep -q 1 \
-  || sudo -u postgres psql -c "CREATE USER ticketing WITH PASSWORD 'devpassword' CREATEDB;"
-sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='ticketing'" | grep -q 1 \
-  || sudo -u postgres psql -c "CREATE DATABASE ticketing OWNER ticketing;"
+log start "Ensuring role/databases exist (idempotent)"
+ensure_databases ticketing
 
-echo "==> [start] Applying migrations"
-set -a; source "$REPO_DIR/.cursor/dev.env"; set +a
-poetry run python manage.py migrate --noinput
+log start "Applying migrations"
+apply_migrations
 
-echo "==> [start] Services ready (Postgres + Redis up, schema migrated)."
+log start "Services ready (Postgres + Redis up, schema migrated)."
