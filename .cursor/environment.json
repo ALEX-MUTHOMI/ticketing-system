@@ -1,0 +1,20 @@
+{
+  "name": "Ticketing System",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "terminals": [
+    {
+      "name": "django",
+      "command": "set -a; source .cursor/dev.env; set +a; exec poetry run python manage.py runserver 0.0.0.0:8000",
+      "description": "Django REST API dev server on :8000 (health: /health/, readiness: /ready/, docs: /api/docs/)."
+    },
+    {
+      "name": "celery",
+      "command": "set -a; source .cursor/dev.env; set +a; exec poetry run celery -A config worker --loglevel=info --concurrency=2",
+      "description": "Celery worker for background tasks (hold expiry sweep, payment timeouts, ticket emails)."
+    }
+  ],
+  "ports": [
+    { "name": "django", "port": 8000 }
+  ]
+}
