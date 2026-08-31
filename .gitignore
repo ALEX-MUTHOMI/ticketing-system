@@ -9,3 +9,8 @@ htmlcov/
 .env
 .env.*
 !.env.example
+
+# Celery beat default (PersistentScheduler) state
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
