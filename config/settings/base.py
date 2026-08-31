@@ -5,10 +5,7 @@ env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-dev-only-key-change-in-production')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'    'core.middleware.RequestIDMiddleware',
-    'core.middleware.SecurityHeadersMiddleware',
-    'core.middleware.RequestLoggingMiddleware',
-])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -137,3 +134,25 @@ CELERY_BROKER_URL = env('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_RESULT_BACKEND = env('REDIS_URL', default='redis://localhost:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+# --- Feature secrets / third-party API keys -------------------------------
+# All optional for local development; wire real values via environment/secrets
+# in staging and production. See .env.example for the full list.
+
+# HMAC secret used to sign QR ticket fingerprints (tickets/models.py).
+QR_SECRET = env('QR_SECRET', default='insecure-dev-secret')
+
+# LemonSqueezy payments (payments/lemon_squeezy.py).
+LEMON_SQUEEZY_API_KEY = env('LEMON_SQUEEZY_API_KEY', default='')
+LEMON_SQUEEZY_WEBHOOK_SECRET = env('LEMON_SQUEEZY_WEBHOOK_SECRET', default='')
+LS_STORE_ID = env('LS_STORE_ID', default='')
+
+# M-Pesa / Safaricom Daraja (payments/mpesa.py).
+MPESA_CONSUMER_KEY = env('MPESA_CONSUMER_KEY', default='')
+MPESA_CONSUMER_SECRET = env('MPESA_CONSUMER_SECRET', default='')
+MPESA_SHORTCODE = env('MPESA_SHORTCODE', default='')
+MPESA_PASSKEY = env('MPESA_PASSKEY', default='')
+MPESA_SANDBOX = env.bool('MPESA_SANDBOX', default=True)
+
+# Sentry error tracking (optional).
+SENTRY_DSN = env('SENTRY_DSN', default='')
