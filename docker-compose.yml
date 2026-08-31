@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:16-alpine
@@ -25,7 +23,7 @@ services:
 
   app:
     build: .
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --reload
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 4 --worker-class gthread --timeout 120 --reload
     volumes:
       - .:/app
     ports:
@@ -49,7 +47,7 @@ services:
 
   celery-beat:
     build: .
-    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A config beat --loglevel=info
     volumes:
       - .:/app
     env_file: .env
